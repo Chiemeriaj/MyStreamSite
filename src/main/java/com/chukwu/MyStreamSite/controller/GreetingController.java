@@ -1,5 +1,4 @@
-package com.chukwu.MyStreamSite.resource;
-
+package com.chukwu.MyStreamSite.controller;
 
 import com.chukwu.MyStreamSite.model.Greeting;
 import com.chukwu.MyStreamSite.model.HelloMessage;
@@ -19,7 +18,5 @@ public class GreetingController {
     Thread.sleep(1000); // simulated delay
     return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
   }
-
-
 
 }

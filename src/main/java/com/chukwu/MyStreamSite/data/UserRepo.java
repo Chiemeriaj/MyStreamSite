@@ -102,13 +102,29 @@ public class UserRepo {
     return mods;
   }
 
-  public boolean addUser(){
-    
+  public static void addUser(){
+
+    String sql = "INSERT INTO users(id,name) VALUES(?,?)";
+
+    try {
+      Connection conn = connect();
+      PreparedStatement preparedStatement =
+          conn.prepareStatement(sql);
+      preparedStatement.setInt(1, 5);
+      preparedStatement.setString(2,"Chuka");
+      preparedStatement.executeUpdate();
+
+    } catch (SQLException e) {
+      System.out.println(e);
+    }
+
+
   }
 
 
   public static void main(String args[]) throws SQLException {
 getUserMods("temp");
+addUser();
 
   }
 

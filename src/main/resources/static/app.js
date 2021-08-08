@@ -1,7 +1,8 @@
 
 let name;
-
+name = "chuka";
 console.log("it worked??");
+
 
 
 function onSignIn(googleUser) {
@@ -11,15 +12,11 @@ function onSignIn(googleUser) {
     console.log('Name: ' + profile.getName());
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-   name = profile.getName();
 
-
-
-    if (name!= null){
-        connect();
-    }
 
 }
+
+console.log(name);
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
@@ -69,6 +66,9 @@ function connect() {
 
 }
 
+
+
+
 function disconnect() {
     if (stompClient !== null) {
         stompClient.disconnect();
@@ -80,7 +80,7 @@ function disconnect() {
 function sendName() {
     stompClient.send("/app/hello", {}, JSON.stringify({'name': name}));
 
-    console.log("name sent")
+    console.log("name sent");
 }
 function sendMessage() {
     stompClient.send("/app/chatbox", {}, JSON.stringify({'content':$("#chat").val(),'name': name
@@ -94,6 +94,9 @@ function showGreeting(message) {
     console.log("look here!" + name);
 }
 
+if (name!= null){
+    connect();
+}
 $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
