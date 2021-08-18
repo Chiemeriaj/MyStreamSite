@@ -1,5 +1,6 @@
 package com.chukwu.MyStreamSite.data;
 
+import com.chukwu.MyStreamSite.Exceptions.TakenUsernameException;
 import com.chukwu.MyStreamSite.model.Channel;
 import com.chukwu.MyStreamSite.model.User;
 import org.springframework.stereotype.Component;
@@ -9,9 +10,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 @Component
@@ -62,7 +63,9 @@ public class UserRepo {
       System.out.println(mods.get(1).getName());
     } catch (SQLException e) {
       System.out.println(e.getMessage());
+
     }
+    connect().close();
     return mods;
   }
 
@@ -89,10 +92,12 @@ public class UserRepo {
       }
       System.out.println(channelsModFor.get(0).getName());
 
+
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
 
+    connect().close();
     return channelsModFor;
   }
 
@@ -102,29 +107,64 @@ public class UserRepo {
     return mods;
   }
 
-  public static void addUser(){
+  public static void addUser(String name, int id) throws TakenUsernameException, SQLException {
 
-    String sql = "INSERT INTO users(id,name) VALUES(?,?)";
+    if (isUser(name)) {
+      throw new TakenUsernameException("That user already exist!!!");
+    } else {
+
+      String sql = "INSERT INTO users(id,name) VALUES(?,?)";
+
+      try {
+        Connection conn = connect();
+        PreparedStatement preparedStatement =
+            conn.prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        preparedStatement.setString(2, name.toLowerCase());
+        preparedStatement.executeUpdate();
+
+
+      } catch (SQLException e) {
+        System.out.println(e);
+      }
+
+      connect().close();
+    }
+  }
+
+  public static boolean isUser(String username) throws SQLException {
+    List<User> allUser = new ArrayList<>();
+    Boolean result = false;
+    String sql =
+        "SELECT users.* from users WHERE ? = users.name;";
 
     try {
       Connection conn = connect();
       PreparedStatement preparedStatement =
           conn.prepareStatement(sql);
-      preparedStatement.setInt(1, 5);
-      preparedStatement.setString(2,"Chuka");
-      preparedStatement.executeUpdate();
+      preparedStatement.setString(1, username.toLowerCase());
+      ResultSet rs = preparedStatement.executeQuery();
+      String match = rs.getString("name");
+
+      result = match.toLowerCase(Locale.ROOT).equals(username.toLowerCase(Locale.ROOT));
+
+      System.out.println(match);
+      System.out.println(match + "hmmm" + username);
+
+      System.out.println(result);
+
 
     } catch (SQLException e) {
-      System.out.println(e);
+      System.out.println(e.getMessage());
     }
-
-
+    connect().close();
+    return result;
   }
 
 
   public static void main(String args[]) throws SQLException {
-getUserMods("temp");
-addUser();
+
+    isUser("Chuka");
 
   }
 
