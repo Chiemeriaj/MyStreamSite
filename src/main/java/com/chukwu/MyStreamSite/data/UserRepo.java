@@ -42,13 +42,13 @@ public class UserRepo {
 
     mods = new ArrayList<>();
     String
-        sql =
-        "SELECT users.* from users,channel_mods WHERE channel_mods.user_id = users.id AND channel_mods.channel_id = ?;";
+            sql =
+            "SELECT users.* from users,channel_mods WHERE channel_mods.user_id = users.id AND channel_mods.channel_id = ?;";
 
     try {
       Connection conn = connect();
       PreparedStatement preparedStatement =
-          conn.prepareStatement(sql);
+              conn.prepareStatement(sql);
       preparedStatement.setInt(1, number);
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -73,13 +73,13 @@ public class UserRepo {
   public static List<Channel> getUserMods(String userToken) throws SQLException {
     List<Channel> channelsModFor = new ArrayList<>();
     String
-        sql =
-        "SELECT channels.* from channels,channel_mods WHERE user_id = channel_mods.user_id AND user_id = ?;";
+            sql =
+            "SELECT channels.* from channels,channel_mods WHERE user_id = channel_mods.user_id AND user_id = ?;";
 
     try {
       Connection conn = connect();
       PreparedStatement preparedStatement =
-          conn.prepareStatement(sql);
+              conn.prepareStatement(sql);
       preparedStatement.setInt(1, number);
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -118,7 +118,7 @@ public class UserRepo {
       try {
         Connection conn = connect();
         PreparedStatement preparedStatement =
-            conn.prepareStatement(sql);
+                conn.prepareStatement(sql);
         preparedStatement.setInt(1, id);
         preparedStatement.setString(2, name.toLowerCase());
         preparedStatement.executeUpdate();
@@ -136,12 +136,12 @@ public class UserRepo {
     List<User> allUser = new ArrayList<>();
     Boolean result = false;
     String sql =
-        "SELECT users.* from users WHERE ? = users.name;";
+            "SELECT users.* from users WHERE ? = users.name;";
 
     try {
       Connection conn = connect();
       PreparedStatement preparedStatement =
-          conn.prepareStatement(sql);
+              conn.prepareStatement(sql);
       preparedStatement.setString(1, username.toLowerCase());
       ResultSet rs = preparedStatement.executeQuery();
       String match = rs.getString("name");
