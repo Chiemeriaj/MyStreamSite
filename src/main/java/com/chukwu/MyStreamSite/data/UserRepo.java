@@ -19,13 +19,14 @@ import java.util.Locale;
 public class UserRepo {
   final private static int number = 1;
   private static List<User> mods;
-  private PreparedStatement preparedStatement;
+
+
 
   public static Connection connect() {
     Connection conn = null;
     try {
       // db parameters
-      String url = "jdbc:sqlite:C:/sqlite/StreamDB.db";
+      String url = "jdbc:sqlite:/Users/chukwu/Downloads/StreamDB.db";
       // create a connection to the database
       conn = DriverManager.getConnection(url);
 
@@ -107,10 +108,11 @@ public class UserRepo {
     return mods;
   }
 
-  public static void addUser(String name, int id) throws TakenUsernameException, SQLException {
+  public static boolean addUser(String name, int id) throws SQLException {
 
     if (isUser(name)) {
-      throw new TakenUsernameException("That user already exist!!!");
+      System.out.println("User exists");
+      return false;
     } else {
 
       String sql = "INSERT INTO users(id,name) VALUES(?,?)";
@@ -130,6 +132,7 @@ public class UserRepo {
 
       connect().close();
     }
+    return true;
   }
 
   public static boolean isUser(String username) throws SQLException {
@@ -148,6 +151,7 @@ public class UserRepo {
 
       result = match.toLowerCase(Locale.ROOT).equals(username.toLowerCase(Locale.ROOT));
 
+
       System.out.println(match);
       System.out.println(match + "hmmm" + username);
 
@@ -158,13 +162,43 @@ public class UserRepo {
       System.out.println(e.getMessage());
     }
     connect().close();
+
     return result;
+  }
+  public static Boolean passwordCheck(String entered, int pin) throws SQLException {
+
+    Boolean result = false;
+    String
+            sql =
+            "SELECT users.id from users WHERE ? = users.name;";
+
+    try {
+      Connection conn = connect();
+      PreparedStatement preparedStatement =
+              conn.prepareStatement(sql);
+      preparedStatement.setString(1, entered);
+      ResultSet rs = preparedStatement.executeQuery();
+
+      int pw = rs.getInt("id");
+
+      result = (pw == pin);
+
+
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+
+    }
+    connect().close();
+    return result;
+
   }
 
 
-  public static void main(String args[]) throws SQLException {
 
-    isUser("Chuka");
+
+  public static void main(String args[]) throws SQLException {
+UserRepo userRepo = new UserRepo();
+    userRepo.isUser("Chuka");
 
   }
 

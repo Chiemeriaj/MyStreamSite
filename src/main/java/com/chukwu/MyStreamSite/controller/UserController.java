@@ -59,13 +59,51 @@ public class UserController {
 
   @RequestMapping(value = "/signup", method = RequestMethod.POST)
   public String saveStudent(@ModelAttribute User user, BindingResult errors, ModelMap model)
-      throws TakenUsernameException, SQLException {
+          throws SQLException {
 
-    userRepo.addUser(user.getName(), user.getId());
+    String name = user.getName();
+    int id = user.getId();
+    boolean result = userRepo.addUser(name, id);
+
+    model.put("result", result);
     System.out.println(user.getId() + " " + user.getName());
     model.put("User", user);
+    if(result){
+      return "redirect:/login";
+    }
 
     return "signup";
+
+
+  }
+  @RequestMapping(value = "/login", method = RequestMethod.GET)
+  public String logUser(@ModelAttribute User user, BindingResult errors, ModelMap model)
+          throws TakenUsernameException {
+
+    model.put("User", user);
+
+    return "login";
+
+
+  }
+  @RequestMapping(value = "/login", method = RequestMethod.POST)
+  public String logUserTask(@ModelAttribute User user, BindingResult errors, ModelMap model)
+          throws SQLException {
+    String name = user.getName();
+    int id = user.getId();
+
+
+
+    boolean result = userRepo.passwordCheck(name, id);
+
+    model.put("result", result);
+
+
+    if(result){
+      return "redirect:/";
+    }
+
+    return "login";
 
 
   }
