@@ -26,7 +26,7 @@ public class UserRepo {
     Connection conn = null;
     try {
       // db parameters
-      String url = "jdbc:sqlite:/Users/chukwu/Downloads/StreamDB.db";
+      String url = "jdbc:sqlite:C:/sqlite/StreamDB.db";
       // create a connection to the database
       conn = DriverManager.getConnection(url);
 
@@ -122,7 +122,7 @@ public class UserRepo {
         PreparedStatement preparedStatement =
                 conn.prepareStatement(sql);
         preparedStatement.setInt(1, id);
-        preparedStatement.setString(2, name.toLowerCase());
+        preparedStatement.setString(2, name);
         preparedStatement.executeUpdate();
 
 
@@ -175,7 +175,7 @@ public class UserRepo {
     try {
       Connection conn = connect();
       PreparedStatement preparedStatement =
-              conn.prepareStatement(sql);
+          conn.prepareStatement(sql);
       preparedStatement.setString(1, entered);
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -184,7 +184,7 @@ public class UserRepo {
       result = (pw == pin);
 
 
-    } catch (SQLException e) {
+    } catch (SQLException | NullPointerException e) {
       System.out.println(e.getMessage());
 
     }

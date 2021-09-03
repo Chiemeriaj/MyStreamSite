@@ -13,64 +13,70 @@
 
     <link rel="stylesheet" th:href="@{/app.css}"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.0.0/bundles/stomp.umd.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
 
     <script th:src="@{/app.js}"></script>
+    <script th:inline="javascript">
+
+
+        var name = [[${username}]];
+        console.log(name);
+
+
+    </script>
 </head>
 <body>
 
-<h1>CHANGE</h1>
+
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies
     on Javascript being
     enabled. Please enable
     Javascript and reload this page!</h2></noscript>
-<div id="main-content" class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="connect">connection status:</label>
-                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-                    <button id="disconnect" class="btn btn-default" type="submit"
-                            disabled="disabled">Disconnect
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-
-
-            </form>
-            <div class="form-group">
-                <label for="chat">text</label>
-                <input type="text" id="chat" class="form-control" placeholder="chat here...">
+<div class="backgroundcolor">
+    <div id="main-content" class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="connect">connection status:</label>
+                        <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                        <button id="disconnect" class="btn btn-default" type="submit"
+                                disabled="disabled">Disconnect
+                        </button>
+                    </div>
+                </form>
             </div>
-            <button id="submit" class="btn btn-default" type="submit">Send</button>
+            <div class="col-md-6">
 
-        </div>
-    </div>
-    <div><a href="#" onclick="signOut();">Sign out</a>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table id="conversation" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>CHAT</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
-        </div>
-    </div>
+                <div class="form-group">
 
+                    <input type="text" id="chat" class="form-control" placeholder="chat here...">
+                </div>
+                <button id="submit" class="btn btn-default" type="submit">Send</button>
+
+            </div>
+        </div>
+
+        <div id="chatbox" class="row">
+            <div class="col-md-12">
+                <table id="conversation" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>CHAT</th>
+                    </tr>
+                    </thead>
+                    <tbody id="greetings">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 </body>

@@ -2,14 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Spring Security Example </title>
+    <link rel="stylesheet" th:href="@{/login.css}"/>
+    <title>Login </title>
 </head>
-<body>
 
-<form th:action="@{/login}" th:object="${User}" method="post">
-    <div><label> UserName : <input type="text" th:field="*{name}"/> </label></div>
-    <div><label> ID number : <input type="number" th:field="*{id}" name="id"/> </label></div>
-    <div><input type="submit" value="Log In"/></div>
-</form>
+<body>
+<div class="middle">
+    <form th:action="@{/login}" th:object="${User}" method="post">
+        <div><label> UserName : <input type="text" th:field="*{name}"/> </label></div>
+        <div><label> ID number : <input type="number" th:field="*{id}" name="id"/> </label></div>
+        <div><input type="submit" value="Log In"/></div>
+    </form>
+</div>
 </body>
 </html>

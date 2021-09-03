@@ -3,21 +3,24 @@ package com.chukwu.MyStreamSite.controller;
 
 import com.chukwu.MyStreamSite.Exceptions.TakenUsernameException;
 import com.chukwu.MyStreamSite.data.UserRepo;
+import com.chukwu.MyStreamSite.data.UserTransporter;
 import com.chukwu.MyStreamSite.model.Channel;
 import com.chukwu.MyStreamSite.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
 import java.sql.SQLException;
 import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class UserController {
@@ -27,13 +30,32 @@ public class UserController {
 
   @RequestMapping("/")
 
-  public String listGifs(ModelMap modelMap) throws SQLException {
-    List<User> allMods = userRepo.getMods();
-    modelMap.put("allMods", allMods);
-    System.out.println(allMods.get(0).getName());
+  public String getCookies(ModelMap modelMap, HttpServletRequest request) throws SQLException {
+
+    Cookie[] cookies = request.getCookies();
+    String value = "username";
+    for (Cookie cookie : cookies) {
+      if (value.equals(cookie.getName())) {
+        modelMap.put("username", cookie.getValue());
+      }
+    }
     return "index";
 
   }
+
+  @GetMapping("/setUsername")
+  public String setCookie(HttpServletResponse response) {
+    User user;
+    if (UserTransporter.isUserAvailable()) {
+      user = UserTransporter.getUser();
+      Cookie cookie = new Cookie("username", user.getName());
+      cookie.setPath("/");
+      response.addCookie(cookie);
+
+    }
+    return "redirect:/";
+  }
+
 
   @RequestMapping("/user/info")
 
@@ -99,8 +121,10 @@ public class UserController {
     model.put("result", result);
 
 
-    if(result){
-      return "redirect:/";
+    if(result) {
+      UserTransporter.setUser(user);
+
+      return "redirect:/setUsername";
     }
 
     return "login";
